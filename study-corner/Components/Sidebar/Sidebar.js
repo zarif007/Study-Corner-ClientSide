@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import SidebarLink from './../SidebarLink/SidebarLink';
-import { HashtagIcon, DotsHorizontalIcon, ArchiveIcon, QuestionMarkCircleIcon, ChatAlt2Icon, PuzzleIcon, FireIcon, BookmarkIcon } from '@heroicons/react/solid'
+import { DotsHorizontalIcon, ArchiveIcon, QuestionMarkCircleIcon, ChatAlt2Icon, PuzzleIcon, FireIcon, BookmarkIcon } from '@heroicons/react/solid'
 
 const Sidebar = () => {
     return (
@@ -9,7 +9,7 @@ const Sidebar = () => {
             <div className='flex items-center justify-center w-14 h-14 p-0 xl:ml-24 hoverAnimation'>
                 <Image src="https://rb.gy/ogau5a" width={30} height={30}/>
             </div>
-            <div className='space-y-2.5 mt-4 mb-2.5 xl:ml-24'>
+            <div className='space-y-3 mt-4 mb-2.5 xl:ml-24'>
                 <SidebarLink text="Resources" Icon={ArchiveIcon}/>
                 <SidebarLink text="Ask" Icon={QuestionMarkCircleIcon}/>
                 <SidebarLink text="Suggestions" Icon={ChatAlt2Icon}/>

@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 
+* {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 @layer base {
     body{
         @apply bg-black;
