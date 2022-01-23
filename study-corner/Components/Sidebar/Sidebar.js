@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import SidebarLink from './../SidebarLink/SidebarLink';
-import { HashtagIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
+import { HashtagIcon, DotsHorizontalIcon, ArchiveIcon, QuestionMarkCircleIcon, ChatAlt2Icon, PuzzleIcon, FireIcon, BookmarkIcon } from '@heroicons/react/solid'
 
 const Sidebar = () => {
     return (
@@ -10,11 +10,14 @@ const Sidebar = () => {
                 <Image src="https://rb.gy/ogau5a" width={30} height={30}/>
             </div>
             <div className='space-y-2.5 mt-4 mb-2.5 xl:ml-24'>
-                <SidebarLink text="Home" Icon={HashtagIcon}/>
-                <SidebarLink text="Explore" Icon={HashtagIcon}/>
-                <SidebarLink text="Tree" Icon={HashtagIcon}/>
+                <SidebarLink text="Resources" Icon={ArchiveIcon}/>
+                <SidebarLink text="Ask" Icon={QuestionMarkCircleIcon}/>
+                <SidebarLink text="Suggestions" Icon={ChatAlt2Icon}/>
+                <SidebarLink text="Extracurricular" Icon={PuzzleIcon}/>
+                <SidebarLink text="Memes" Icon={FireIcon}/>
+                <SidebarLink text="Saved" Icon={BookmarkIcon}/>
             </div>
-            <div className='text-white flex items-center justify-center mt-auto hoverAnimation xl:ml-auto xl:-mr-5'>
+            <div className='text-white flex items-center justify-center mt-auto xl:ml-24 hoverAnimation  xl:-mr-5'>
                 <img src='https://rb.gy/ogau5a' className='h-10 w-10 rounded-full xl:mr-2.5'/>
                 <div className='hidden xl:inline leading-5'>
                     <h4 className='font-bold'>Zarif</h4>
