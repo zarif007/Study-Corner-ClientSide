@@ -1,10 +1,25 @@
-import { XIcon } from '@heroicons/react/solid';
-import React, { useState } from 'react'
+import { CalendarIcon, ChartBarIcon, EmojiHappyIcon, PhotographIcon, XIcon } from '@heroicons/react/solid';
+import React, { useRef, useState } from 'react'
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 
 const ResourceInput = () => {
 
     const [input, setInput] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
+    const [showEmojis, setShowEmojis] = useState(false);
+    
+    const filePickerRef = useRef();
+
+    const addImageToPost = () => {}
+
+    const addEmoji = e => {
+        let sym = e.unified.split('-');
+        let codesArray = [];
+        sym.forEach(el => codesArray.push('0x' + el));
+        let emoji = String.fromCodePoint(...codesArray);
+        setInput(input + emoji);
+    }
 
     return (
       <div className={`border-b border-gray-700 p-3 flex space-x-3`}>
@@ -12,8 +27,8 @@ const ResourceInput = () => {
 
         <div className='w-full divide-y divide-gray-700'>
           <div className={''}>
-            <textarea value={input} name='' rows='2' 
-              className='min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
+            <textarea value={input} name='' rows='3' 
+              className='overflow-y-hidden min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
               placeholder='Share Course based resources'
               onChange={e => setInput(e.target.value)}  
             />
@@ -29,6 +44,41 @@ const ResourceInput = () => {
                 </div>
               </div>
             }
+          </div>
+
+          <div className='flex items-center justify-between pt-2.5'>
+            <div className='flex items-center'>
+              <div className='icon' onClick={() => filePickerRef.current.click()}>
+                <PhotographIcon className='h-[22px] text-[#1D9BF0]' />
+                <input type='file' onChange={addImageToPost} ref={filePickerRef} hidden/>
+              </div>
+              <div className="icon rotate-90">
+                <ChartBarIcon className="text-[#1d9bf0] h-[22px]" />
+              </div>
+
+              <div className="icon" onClick={() => setShowEmojis(!showEmojis)}>
+                <EmojiHappyIcon className="text-[#1d9bf0] h-[22px]" />
+              </div>
+
+              <div className="icon">
+                <CalendarIcon className="text-[#1d9bf0] h-[22px]" />
+              </div>
+
+              {
+                showEmojis && <Picker 
+                  onSelect={addEmoji}
+                  style={{
+                    position: "absolute",
+                    marginTop: "465px",
+                    marginLeft: -40,
+                    maxWidth: "320px",
+                    borderRadius: "20px",
+                  }}
+                  theme="dark"
+                />
+              }
+            </div>
+            <button className='bg-[#1d9bf0] text-white rounded-sm px-4 py-1.5 font-bold shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default'>Post</button>
           </div>
         </div>
       </div>
