@@ -2,10 +2,14 @@ import { CalendarIcon, ChartBarIcon, EmojiHappyIcon, PhotographIcon, XIcon } fro
 import React, { useRef, useState } from 'react'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
+import Multiselect from 'multiselect-react-dropdown';
+
+
 
 const ResourceInput = () => {
 
     const [input, setInput] = useState('');
+    const [selectedCourses, setSelectedCourses] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const [showEmojis, setShowEmojis] = useState(false);
     
@@ -21,12 +25,31 @@ const ResourceInput = () => {
         setInput(input + emoji);
     }
 
+    const courses = ['420', '340', '110', '111', '320'];
+
+    const MultiSelectstyle = {
+      searchBox: {
+        border: "none",
+      },
+      multiselectContainer: {
+        color: "#1d9bf0"
+      }
+    };
+
     return (
-      <div className={`border-b border-gray-700 p-3 flex space-x-3`}>
+      <div className={`border-b border-gray-700 p-3 flex space-x-3 `}>
         <img src='https://rb.gy/ogau5a' className='h-11 w-11 rounded-full cursor-pointer' alt=''/>
 
         <div className='w-full divide-y divide-gray-700'>
-          <div className={''}>
+          <div className={`${selectedImage && 'pb-7'} ${input && 'space-y-2.5'} divide-y divide-gray-700`}>
+            <Multiselect
+              isObject={false}
+              options={courses}
+              placeholder='Select Related Course/s'
+              onSelect={e => console.log(e)}
+              onRemove={e => console.log(e)}
+              style={MultiSelectstyle}
+            />
             <textarea value={input} name='' rows='3' 
               className='overflow-y-hidden min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
               placeholder='Share Course based resources'
@@ -78,7 +101,10 @@ const ResourceInput = () => {
                 />
               }
             </div>
-            <button className='bg-[#1d9bf0] text-white rounded-sm px-4 py-1.5 font-bold shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default'>Post</button>
+            <button 
+              className='bg-[#1d9bf0] text-white rounded-sm px-4 py-1.5 shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default'
+              disabled={!input.trim() && !selectedImage}
+            >Post</button>
           </div>
         </div>
       </div>
