@@ -8,6 +8,7 @@ import Multiselect from 'multiselect-react-dropdown';
 
 const ResourceInput = () => {
 
+    const [title, setTitle] = useState('');
     const [input, setInput] = useState('');
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -25,15 +26,15 @@ const ResourceInput = () => {
         setInput(input + emoji);
     }
 
-    const courses = ['420', '340', '110', '111', '320', 'Others'];
+    const courses = ['CSE420', 'CSE340', 'CSE110', 'CSE111', 'CSE320', 'Others'];
 
     const MultiSelectstyle = {
-      searchBox: {
-        border: "none",
-      },
-      multiselectContainer: {
-        color: "#1d9bf0"
-      },
+        searchBox: {
+          border: "none",
+        },
+        multiselectContainer: {
+          color: "#1d9bf0"
+        },
     };
 
     return (
@@ -42,20 +43,55 @@ const ResourceInput = () => {
 
         <div className='w-full divide-y divide-gray-700'>
           <div className={`${selectedImage && 'pb-7'} ${input && 'space-y-2.5'} divide-y divide-gray-700`}>
-            <input value={input}
+            <input value={title}
               className='overflow-y-hidden font-extrabold min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
               placeholder='Title'
-              onChange={e => setInput(e.target.value)}  
+              onChange={e => {
+                setTitle(e.target.value);
+                let cs = new Set([...selectedCourses]); 
+                courses.map(course => {
+                  if(title.includes(course.substring(3)))
+                    cs.add(course);
+                });
+                setSelectedCourses([...cs]);
+              }}  
+              onBlur={e => {
+                setTitle(e.target.value);
+                let cs = new Set([...selectedCourses]); 
+                courses.map(course => {
+                  if(title.includes(course.substring(3)))
+                    cs.add(course);
+                });
+                setSelectedCourses([...cs]);
+              }}
             />
             <textarea value={input} name='' rows='3' 
               className='overflow-y-hidden min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
               placeholder='Share Course based resources'
-              onChange={e => setInput(e.target.value)}  
+              onChange={e => {
+                setInput(e.target.value);
+                let cs = new Set([...selectedCourses]); 
+                courses.map(course => {
+                  if(input.includes(course.substring(3)))
+                    cs.add(course);
+                });
+                setSelectedCourses([...cs]);
+              }}  
+              onBlur={e => {
+                setInput(e.target.value);
+                let cs = new Set([...selectedCourses]); 
+                courses.map(course => {
+                  if(input.includes(course.substring(3)))
+                    cs.add(course);
+                });
+                setSelectedCourses([...cs]);
+              }}
             />
 
             <Multiselect
               isObject={false}
               options={courses}
+              selectedValues={selectedCourses}
               placeholder='Select Related Course/s'
               onSelect={e => {setSelectedCourses(e)
                 console.log(selectedCourses)
