@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Sidebar from './../Components/Sidebar/Sidebar';
 import ResourcesFeed from './../Components/Feed/ResourcesFeed';
+import Widgets from './../Components/Widgets/Widgets';
 
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
         <main className='bg-black min-h-screen flex max-w-full mx-auto'>
           <Sidebar /> 
           <ResourcesFeed />
+          <Widgets />
         </main>
       </div>
     )

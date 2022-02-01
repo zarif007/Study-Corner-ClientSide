@@ -9,7 +9,7 @@ import Multiselect from 'multiselect-react-dropdown';
 const ResourceInput = () => {
 
     const [title, setTitle] = useState('');
-    const [input, setInput] = useState('');
+    const [body, setBody] = useState('');
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const [showEmojis, setShowEmojis] = useState(false);
@@ -23,7 +23,7 @@ const ResourceInput = () => {
         let codesArray = [];
         sym.forEach(el => codesArray.push('0x' + el));
         let emoji = String.fromCodePoint(...codesArray);
-        setInput(input + emoji);
+        setBody(body + emoji);
     }
 
     const courses = ['CSE420', 'CSE340', 'CSE110', 'CSE111', 'CSE320', 'Others'];
@@ -33,55 +33,59 @@ const ResourceInput = () => {
           border: "none",
         },
         multiselectContainer: {
-          color: "#1d9bf0"
+          color: "#1d9bf0",
         },
     };
 
     return (
-      <div className={`border-b border-gray-700 p-3 flex space-x-3 lg:pl-12 lg:pr-12`}>
+      <div className={`border-b border-gray-700 p-3 flex space-x-3 lg:pl-24 lg:pr-24`}>
         <img src='https://rb.gy/ogau5a' className='h-11 w-11 rounded-full cursor-pointer' alt=''/>
 
         <div className='w-full divide-y divide-gray-700'>
-          <div className={`${selectedImage && 'pb-7'} ${input && 'space-y-2.5'} divide-y divide-gray-700`}>
+          <div className={`${selectedImage && 'pb-7'} ${body && 'space-y-2.5'} divide-y divide-gray-700`}>
             <input value={title}
               className='overflow-y-hidden font-extrabold min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
               placeholder='Title'
               onChange={e => {
                 setTitle(e.target.value);
-                let cs = new Set([...selectedCourses]); 
+                let cs = new Set();
+                let text = title + body; 
                 courses.map(course => {
-                  if(title.includes(course.substring(3)))
+                  if(text.includes(course.substring(3)))
                     cs.add(course);
                 });
                 setSelectedCourses([...cs]);
               }}  
               onBlur={e => {
                 setTitle(e.target.value);
-                let cs = new Set([...selectedCourses]); 
+                let cs = new Set();
+                let text = title + body; 
                 courses.map(course => {
-                  if(title.includes(course.substring(3)))
+                  if(text.includes(course.substring(3)))
                     cs.add(course);
                 });
                 setSelectedCourses([...cs]);
               }}
             />
-            <textarea value={input} name='' rows='3' 
+            <textarea value={body} name='' rows='3' 
               className='overflow-y-hidden min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
               placeholder='Share Course based resources'
               onChange={e => {
-                setInput(e.target.value);
-                let cs = new Set([...selectedCourses]); 
+                setBody(e.target.value);
+                let cs = new Set();
+                let text = title + body; 
                 courses.map(course => {
-                  if(input.includes(course.substring(3)))
+                  if(text.includes(course.substring(3)))
                     cs.add(course);
                 });
                 setSelectedCourses([...cs]);
               }}  
               onBlur={e => {
-                setInput(e.target.value);
-                let cs = new Set([...selectedCourses]); 
+                setBody(e.target.value);
+                let cs = new Set();
+                let text = title + body; 
                 courses.map(course => {
-                  if(input.includes(course.substring(3)))
+                  if(text.includes(course.substring(3)))
                     cs.add(course);
                 });
                 setSelectedCourses([...cs]);
@@ -140,7 +144,7 @@ const ResourceInput = () => {
             </div>
             <button 
               className='bg-[#1d9bf0] text-white rounded-sm px-4 py-1.5 shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default'
-              disabled={!input.trim() || selectedCourses.length == 0}
+              disabled={!body.trim() || selectedCourses.length == 0}
             >Post</button>
           </div>
         </div>
