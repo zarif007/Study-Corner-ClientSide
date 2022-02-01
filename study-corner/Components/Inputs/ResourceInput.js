@@ -25,7 +25,7 @@ const ResourceInput = () => {
         setInput(input + emoji);
     }
 
-    const courses = ['420', '340', '110', '111', '320'];
+    const courses = ['420', '340', '110', '111', '320', 'Others'];
 
     const MultiSelectstyle = {
       searchBox: {
@@ -33,22 +33,19 @@ const ResourceInput = () => {
       },
       multiselectContainer: {
         color: "#1d9bf0"
-      }
+      },
     };
 
     return (
-      <div className={`border-b border-gray-700 p-3 flex space-x-3 `}>
+      <div className={`border-b border-gray-700 p-3 flex space-x-3 lg:pl-12 lg:pr-12`}>
         <img src='https://rb.gy/ogau5a' className='h-11 w-11 rounded-full cursor-pointer' alt=''/>
 
         <div className='w-full divide-y divide-gray-700'>
           <div className={`${selectedImage && 'pb-7'} ${input && 'space-y-2.5'} divide-y divide-gray-700`}>
-            <Multiselect
-              isObject={false}
-              options={courses}
-              placeholder='Select Related Course/s'
-              onSelect={e => console.log(e)}
-              onRemove={e => console.log(e)}
-              style={MultiSelectstyle}
+            <input value={input}
+              className='overflow-y-hidden font-extrabold min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
+              placeholder='Title'
+              onChange={e => setInput(e.target.value)}  
             />
             <textarea value={input} name='' rows='3' 
               className='overflow-y-hidden min-h-[50px] bg-transparent outline-none text-white text-lg placeholder-gray-500 tracking-wide w-full' 
@@ -56,6 +53,18 @@ const ResourceInput = () => {
               onChange={e => setInput(e.target.value)}  
             />
 
+            <Multiselect
+              isObject={false}
+              options={courses}
+              placeholder='Select Related Course/s'
+              onSelect={e => {setSelectedCourses(e)
+                console.log(selectedCourses)
+                }}
+              onRemove={e => {setSelectedCourses(e)
+                console.log(selectedCourses)
+                }}
+              style={MultiSelectstyle}
+            />
             {
               selectedImage && 
               <div className='relative'>
@@ -75,18 +84,10 @@ const ResourceInput = () => {
                 <PhotographIcon className='h-[22px] text-[#1D9BF0]' />
                 <input type='file' onChange={addImageToPost} ref={filePickerRef} hidden/>
               </div>
-              <div className="icon rotate-90">
-                <ChartBarIcon className="text-[#1d9bf0] h-[22px]" />
-              </div>
 
               <div className="icon" onClick={() => setShowEmojis(!showEmojis)}>
                 <EmojiHappyIcon className="text-[#1d9bf0] h-[22px]" />
               </div>
-
-              <div className="icon">
-                <CalendarIcon className="text-[#1d9bf0] h-[22px]" />
-              </div>
-
               {
                 showEmojis && <Picker 
                   onSelect={addEmoji}
@@ -103,7 +104,7 @@ const ResourceInput = () => {
             </div>
             <button 
               className='bg-[#1d9bf0] text-white rounded-sm px-4 py-1.5 shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default'
-              disabled={!input.trim() && !selectedImage}
+              disabled={!input.trim() || selectedCourses.length == 0}
             >Post</button>
           </div>
         </div>
