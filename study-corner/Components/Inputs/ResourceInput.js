@@ -11,6 +11,7 @@ const ResourceInput = () => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [selectedCourses, setSelectedCourses] = useState([]);
+    const [selectedCoursesFromMultiSelector, setSelectedCoursesFromMultiSelector] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const [showEmojis, setShowEmojis] = useState(false);
     
@@ -48,7 +49,7 @@ const ResourceInput = () => {
               placeholder='Title'
               onChange={e => {
                 setTitle(e.target.value);
-                let cs = new Set();
+                let cs = new Set([...selectedCoursesFromMultiSelector]);
                 let text = title + body; 
                 courses.map(course => {
                   if(text.includes(course.substring(3)))
@@ -58,7 +59,7 @@ const ResourceInput = () => {
               }}  
               onBlur={e => {
                 setTitle(e.target.value);
-                let cs = new Set();
+                let cs = new Set([...selectedCoursesFromMultiSelector]);
                 let text = title + body; 
                 courses.map(course => {
                   if(text.includes(course.substring(3)))
@@ -72,7 +73,7 @@ const ResourceInput = () => {
               placeholder='Share Course based resources'
               onChange={e => {
                 setBody(e.target.value);
-                let cs = new Set();
+                let cs = new Set([...selectedCoursesFromMultiSelector]);
                 let text = title + body; 
                 courses.map(course => {
                   if(text.includes(course.substring(3)))
@@ -82,7 +83,7 @@ const ResourceInput = () => {
               }}  
               onBlur={e => {
                 setBody(e.target.value);
-                let cs = new Set();
+                let cs = new Set([...selectedCoursesFromMultiSelector]);
                 let text = title + body; 
                 courses.map(course => {
                   if(text.includes(course.substring(3)))
@@ -97,12 +98,11 @@ const ResourceInput = () => {
               options={courses}
               selectedValues={selectedCourses}
               placeholder='Select Related Course/s'
-              onSelect={e => {setSelectedCourses(e)
-                console.log(selectedCourses)
-                }}
+              onSelect={e => {setSelectedCoursesFromMultiSelector(e)
+              }}
               onRemove={e => {setSelectedCourses(e)
-                console.log(selectedCourses)
-                }}
+                setSelectedCoursesFromMultiSelector(e);
+              }}
               style={MultiSelectstyle}
             />
             {
