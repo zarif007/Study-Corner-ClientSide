@@ -3,7 +3,15 @@ import React, { useRef, useState } from 'react'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import Multiselect from 'multiselect-react-dropdown';
-
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "@firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "@firebase/storage";
+import { initializeFireBase } from '../../FireBase/firebase'
 
 
 const ResourceInput = () => {
@@ -14,10 +22,20 @@ const ResourceInput = () => {
     const [selectedCoursesFromMultiSelector, setSelectedCoursesFromMultiSelector] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const [showEmojis, setShowEmojis] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     
     const filePickerRef = useRef();
 
-    const addImageToPost = () => {}
+    const addImageToPost = e => {
+        const reader = new FileReader();
+        if(e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        reader.onload = readerEvent => {
+            setSelectedImage(readerEvent.target.result);
+        }
+    }
 
     const addEmoji = e => {
         let sym = e.unified.split('-');
@@ -25,6 +43,41 @@ const ResourceInput = () => {
         sym.forEach(el => codesArray.push('0x' + el));
         let emoji = String.fromCodePoint(...codesArray);
         setBody(body + emoji);
+    }
+
+    const submitPost = async () => {
+        if(isLoading) return;
+        setIsLoading(true);
+
+        const data = {
+            title: title, 
+            body: body,
+            courses: selectedCourses,
+            timestamp: serverTimestamp(),
+        }
+        const {db, storage} = initializeFireBase();
+
+        const docRef = await addDoc(collection(db, 'resources'), data);
+
+        const imageRef = ref(storage, `resources/${docRef.id}/image`);
+
+        if(selectedImage) {
+            await uploadString(imageRef, selectedImage, 'data_url')
+              .then(async () => {
+                  const downloadURL = await getDownloadURL(imageRef);
+                  await updateDoc(doc(db, 'resources', docRef.id), {
+                    image: downloadURL,
+                  })
+              })
+        }
+
+        setIsLoading(false);
+        setBody("");
+        setTitle('');
+        setSelectedCourses([]);
+        setSelectedCoursesFromMultiSelector([]);
+        setSelectedImage(null);
+        setShowEmojis(false);
     }
 
     const courses = ['CSE420', 'CSE340', 'CSE110', 'CSE111', 'CSE320', 'Others'];
@@ -39,7 +92,7 @@ const ResourceInput = () => {
     };
 
     return (
-      <div className={`border-b border-gray-700 p-3 flex space-x-3 lg:pl-24 lg:pr-24`}>
+      <div className={`border-b border-gray-700 p-3 flex space-x-3 lg:pl-24 lg:pr-24 ${isLoading && 'opacity-60'}`}>
         <img src='https://rb.gy/ogau5a' className='h-11 w-11 rounded-full cursor-pointer' alt=''/>
 
         <div className='w-full divide-y divide-gray-700'>
@@ -106,16 +159,21 @@ const ResourceInput = () => {
               style={MultiSelectstyle}
             />
             {
-              selectedImage && 
-              <div className='relative'>
-                <div className='absolute w-8 h-8 bg-black hover:bg-slate-800 bg-opacity-75 rounded-full flex items-center justify-center top-1 left-1 cursor-pointer'
+              selectedImage && (
+              <div className="relative mt-2">
+                  <div
+                    className="absolute w-8 h-8 bg-[#15181c] hover:bg-[#272c26] bg-opacity-75 rounded-full flex items-center justify-center top-1 left-1 cursor-pointer"
                     onClick={() => setSelectedImage(null)}
                   >
-                  <XIcon className='h-5 text-white'/> 
-                  <img src={selectedImage} className='rounded-2xl max-h-80 object-contain' />
-                </div>
+                    <XIcon className="text-white h-5"/>
+                  </div>
+                  <img
+                    src={selectedImage}
+                    alt=""
+                    className="rounded-2xl max-h-80 object-contain pt-2"
+                  />
               </div>
-            }
+            )}
           </div>
 
           <div className='flex items-center justify-between pt-2.5'>
@@ -144,7 +202,8 @@ const ResourceInput = () => {
             </div>
             <button 
               className='bg-[#1d9bf0] text-white rounded-sm px-4 py-1.5 shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default'
-              disabled={!body.trim() || selectedCourses.length == 0}
+              disabled={!body.trim() || selectedCourses.length == 0 || !title.trim()}
+              onClick={submitPost}
             >Post</button>
           </div>
         </div>
