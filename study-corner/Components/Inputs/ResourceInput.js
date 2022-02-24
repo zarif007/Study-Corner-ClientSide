@@ -45,6 +45,16 @@ const ResourceInput = () => {
         setBody(body + emoji);
     }
 
+    const addCoursesFromBodyAndTitle = () => {
+        let cs = new Set([...selectedCoursesFromMultiSelector]);
+        let text = title + body; 
+        courses.map(course => {
+          if(text.includes(course.substring(3)))
+            cs.add(course);
+        });
+        setSelectedCourses([...cs]);
+    }
+
     const submitPost = async () => {
         if(isLoading) return;
         setIsLoading(true);
@@ -102,23 +112,11 @@ const ResourceInput = () => {
               placeholder='Title'
               onChange={e => {
                 setTitle(e.target.value);
-                let cs = new Set([...selectedCoursesFromMultiSelector]);
-                let text = title + body; 
-                courses.map(course => {
-                  if(text.includes(course.substring(3)))
-                    cs.add(course);
-                });
-                setSelectedCourses([...cs]);
+                addCoursesFromBodyAndTitle()
               }}  
               onBlur={e => {
                 setTitle(e.target.value);
-                let cs = new Set([...selectedCoursesFromMultiSelector]);
-                let text = title + body; 
-                courses.map(course => {
-                  if(text.includes(course.substring(3)))
-                    cs.add(course);
-                });
-                setSelectedCourses([...cs]);
+                addCoursesFromBodyAndTitle()
               }}
             />
             <textarea value={body} name='' rows='3' 
@@ -126,23 +124,11 @@ const ResourceInput = () => {
               placeholder='Share Course based resources'
               onChange={e => {
                 setBody(e.target.value);
-                let cs = new Set([...selectedCoursesFromMultiSelector]);
-                let text = title + body; 
-                courses.map(course => {
-                  if(text.includes(course.substring(3)))
-                    cs.add(course);
-                });
-                setSelectedCourses([...cs]);
+                addCoursesFromBodyAndTitle()
               }}  
               onBlur={e => {
                 setBody(e.target.value);
-                let cs = new Set([...selectedCoursesFromMultiSelector]);
-                let text = title + body; 
-                courses.map(course => {
-                  if(text.includes(course.substring(3)))
-                    cs.add(course);
-                });
-                setSelectedCourses([...cs]);
+                addCoursesFromBodyAndTitle()
               }}
             />
 
@@ -155,7 +141,8 @@ const ResourceInput = () => {
                 setSelectedCoursesFromMultiSelector(e);
                 setSelectedCourses(e);
               }}
-              onRemove={e => {setSelectedCourses(e)
+              onRemove={e => {
+                setSelectedCourses(e)
                 setSelectedCoursesFromMultiSelector(e);
               }}
               style={MultiSelectstyle}
