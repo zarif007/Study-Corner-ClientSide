@@ -151,7 +151,9 @@ const ResourceInput = () => {
               options={courses}
               selectedValues={selectedCourses}
               placeholder='Select Related Course/s'
-              onSelect={e => {setSelectedCoursesFromMultiSelector(e)
+              onSelect={e => {
+                setSelectedCoursesFromMultiSelector(e);
+                setSelectedCourses(e);
               }}
               onRemove={e => {setSelectedCourses(e)
                 setSelectedCoursesFromMultiSelector(e);
