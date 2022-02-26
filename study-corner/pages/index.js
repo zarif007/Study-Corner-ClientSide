@@ -20,4 +20,8 @@ export default function Home() {
         </main>
       </div>
     )
+};
+
+export async function getServerSideProps() {
+  
 }

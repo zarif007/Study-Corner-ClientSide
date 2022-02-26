@@ -191,7 +191,7 @@ const ResourceInput = () => {
             </div>
             <button 
               className='bg-[#1d9bf0] text-white rounded-sm px-4 py-1.5 shadow-md hover:bg-[#1a8cd8] disabled:hover:bg-[#1d9bf0] disabled:opacity-50 disabled:cursor-default'
-              disabled={!body.trim() || selectedCourses.length == 0 || !title.trim()}
+              disabled={!body.trim() || selectedCourses.length == 0 || !title.trim() || isLoading}
               onClick={submitPost}
             >Post</button>
           </div>
